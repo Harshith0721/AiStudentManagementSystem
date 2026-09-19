@@ -15,6 +15,23 @@ public class AiLayer {
 
     public String operate(String prompt){
         return chatClient.prompt()
+                .system("""
+                    You are a student management assistant.
+
+                    When adding a new student:
+                    - Create a StudentEntity.
+                    - Create a new PercentageEntity inside the student.
+                    - Do NOT provide the id of StudentEntity.
+                    - Do NOT provide the id of PercentageEntity.
+                    - The database will generate both IDs.
+                    """)
+                .user(prompt)
+                .tools(studentService)
+                .call()
+                .content();
+    }
+    public String operates(String prompt){
+        return chatClient.prompt()
                 .user(prompt)
                 .tools(studentService)
                 .call()

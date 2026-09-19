@@ -3,23 +3,24 @@ package org.stdumng.aistudentmanagementsystem;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
-
-    public StudentService(StudentRepository studentRepository) {
+    private final PercentageRepository percentageRepository;
+    public StudentService(StudentRepository studentRepository, PercentageRepository percentageRepository) {
         this.studentRepository = studentRepository;
+        this.percentageRepository = percentageRepository;
     }
-    @Tool(description = "This method is used to add or insert the students")
-    public String addStudent(StudentEntity s){
+    @Tool(description = "Add a new student with his percentage to the database")
+    public String addStudent(StudentEntity student) {
+
         System.out.println("🔥 TOOL WAS CALLED!");
-        StudentEntity se=new StudentEntity();
-        se.setFirstName(s.getFirstName());
-        se.setLastName(s.getLastName());
-        se.setStandard(s.getStandard());
-        studentRepository.save(se);
+
+        studentRepository.save(student);
+
         return "Student added successfully";
     }
     @Tool(description = "Tool for finding students")
@@ -35,5 +36,13 @@ public class StudentService {
         }
 
         return "No student found with ID: " + id;
+    }
+    @Tool(description = "tool that finds student with percentage")
+    public String findPercentage(double percentage){
+        List<StudentEntity> l=studentRepository.findByPercentage(percentage);
+        for(StudentEntity s:l){
+           return s.getFirstName()+" "+s.getLastName();
+        }
+        return "No student found with percentage: " + percentage;
     }
 }

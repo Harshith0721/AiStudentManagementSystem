@@ -1,9 +1,6 @@
 package org.stdumng.aistudentmanagementsystem;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class StudentEntity {
@@ -13,11 +10,15 @@ public class StudentEntity {
     private String firstName;
     private String lastName;
     private long standard;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "percentage_id")
+    private PercentageEntity percentage;
     public StudentEntity() {}
-    public StudentEntity(String firstName, String lastName, long standard) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public StudentEntity(long standard, PercentageEntity percentage, String lastName, String firstName) {
         this.standard = standard;
+        this.percentage = percentage;
+        this.lastName = lastName;
+        this.firstName = firstName;
     }
 
     public String getFirstName() {
@@ -35,12 +36,19 @@ public class StudentEntity {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
     public long getStandard() {
         return standard;
     }
 
     public void setStandard(long standard) {
-       this.standard = standard;
+        this.standard = standard;
+    }
+
+    public PercentageEntity getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(PercentageEntity percentage) {
+        this.percentage = percentage;
     }
 }

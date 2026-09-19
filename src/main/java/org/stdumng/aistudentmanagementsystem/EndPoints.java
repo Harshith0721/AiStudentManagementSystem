@@ -19,4 +19,8 @@ public class EndPoints {
     public String getStudent(@RequestBody String prompt){
         return aiLayer.operate(prompt);
     }
+    @GetMapping("/getByPercentage")
+    public String getByPercentage(@RequestBody String prompt){
+         return aiLayer.operates(prompt);
+    }
 }
